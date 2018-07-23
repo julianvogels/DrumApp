@@ -14,13 +14,15 @@ import AudioKit
 class MainViewController: UIViewController, SequencerPositionDelegate {
     
     let conductor = Conductor()
-
+    
     var playButton : UIButton!
     var stopButton : UIButton!
     var homeButton : UIButton!
     var presetButton :UIButton!
     var randomButton : UIButton!
     var shiftButton : UIButton!
+    var trackSpeedButton : UIButton!
+    var trackLengthButton : UIButton!
     
     let controllerStack = UIStackView()
     let sequencerStack = UIStackView()
@@ -35,12 +37,16 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
     
     var currentStep = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     var currentStepHasRetriggerd = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
+    var beatCounter = 0
+    
     func updateStepCounter(stepPosition: Int) {
         for track in 0 ... 11 {
-            highlightCurrentStep(track: track, currentStep: currentStep[track])
-            updateNextStep(track: track)
+            if beatCounter % (trackDetailsArray[track].speed + 1 ) == 0 || beatCounter == 0{
+                highlightCurrentStep(track: track, currentStep: currentStep[track])
+                updateNextStep(track: track)
+            }
         }
+        beatCounter += 1
     }
     
     let buttonLabels = ["VEL", "PTCH", "OCTV", "OFFST", "RTRG", "%", "RMP ▲", "RMP ▼", "RVRS", "PNG", "RNDM", "LNGTH", "SPD", "SOLO", "MUTE", "FX"]
@@ -53,7 +59,7 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
     var soloButtonColour = UIColor.yellow
     var muteButtonColour = UIColor.blue
     var stepSequencePositionColour = UIColor.red
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,9 +76,9 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
         return .lightContent
     }
     
-
+    
     func enterStepParameterValues(track: Int, condition: Int) {
-
+        
         switch condition {
         case 0 :
             sequencerDetails.selectedParameter = .velocity
@@ -101,19 +107,19 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
         case 8 : configurePlayDirection(track: track, direction: .reverse)
         case 9 : configurePlayDirection(track: track, direction: .pingPongForward)
         case 10 : configurePlayDirection(track: track, direction: .random)
-        case 11 : print("need to implement feature") 
+        case 11 : print("need to implement feature")
         case 12 : print("need to implement feature")
         case 13 : soloTrack(track: track)
         case 14 : muteTrack(track: track)
         case 15 : print("need to implement feature")
         default : print("Unrecognised feature")
         }
-
+        
     }
     
     
     func changeViewInToSelectedSequencerMode(track: Int) {
-        currentTrack = track 
+        currentTrack = track
         sequencerDetails.sequencerMode = .updatingStepDetails
         updateCurrentTrackIndicators()
         updateGridWithButtonStatusForSequencerMode()
@@ -125,7 +131,7 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
         var trackStepDetail = stepButtonArray[currentTrack][column].stepDetails
         
         clearPreviousStepColours(column: column)
-
+        
         switch sequencerDetails.selectedParameter {
         case .velocity :
             
@@ -211,70 +217,70 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
         if currentStepHasRetriggerd[track] >= stepButtonArray[track][currentStep[track]].stepDetails.retrigger {
             
             currentStepHasRetriggerd[track] = 0
-
             
-                    switch trackDetailsArray[track].playDirection {
-                    case .forward :
-                        
-                        if currentStep[track] == trackDetailsArray[track].loopLength {
-                            currentStep[track] = 0
-                        } else {
-                            currentStep[track] += 1
-                        }
-                        
-                    case .random :
-                        
-                        currentStep[track] = Int(arc4random_uniform(UInt32(15)))
-                        
-                    case .reverse :
-                        
-                        if currentStep[track] == 0 {
-                            currentStep[track] = trackDetailsArray[track].loopLength
-                        } else {
-                            currentStep[track] -= 1
-                        }
-                        
-                    case .pingPongForward :
-                        
-                        if currentStep[track] == trackDetailsArray[track].loopLength {
-                            currentStep[track] -= 1
-                            trackDetailsArray[track].playDirection = .pingPongReverse
-                        } else {
-                            currentStep[track] += 1
-                        }
-                        
-                    case .pingPongReverse :
-                        
-                        if currentStep[track] == 0 {
-                            currentStep[track] += 1
-                            trackDetailsArray[track].playDirection = .pingPongForward
-                        } else {
-                            currentStep[track] -= 1
-                        }
-                        
-                    default : currentStep[track] += 0
-                        
-                    }
+            
+            switch trackDetailsArray[track].playDirection {
+            case .forward :
+                
+                if currentStep[track] == trackDetailsArray[track].loopLength || currentStep[track] == 15 {
+                    currentStep[track] = 0
+                } else {
+                    currentStep[track] += 1
+                }
+                
+            case .random :
+                
+                currentStep[track] = Int(arc4random_uniform(UInt32(trackDetailsArray[track].loopLength)))
+                
+            case .reverse :
+                
+                if currentStep[track] == 0 {
+                    currentStep[track] = trackDetailsArray[track].loopLength
+                } else {
+                    currentStep[track] -= 1
+                }
+                
+            case .pingPongForward :
+                
+                if currentStep[track] == trackDetailsArray[track].loopLength || currentStep[track] == 15 {
+                    currentStep[track] -= 1
+                    trackDetailsArray[track].playDirection = .pingPongReverse
+                } else {
+                    currentStep[track] += 1
+                }
+                
+            case .pingPongReverse :
+                
+                if currentStep[track] == 0 {
+                    currentStep[track] += 1
+                    trackDetailsArray[track].playDirection = .pingPongForward
+                } else {
+                    currentStep[track] -= 1
+                }
+                
+            default : currentStep[track] += 0
+                
+            }
             
         } else {
             currentStep[track] += 0
         }
     }
-
-
+    
+    
     func highlightCurrentStep(track: Int, currentStep: Int) {
         
         if currentStep % 1 == 0 {
-
-        DispatchQueue.main.async {
+            
+            DispatchQueue.main.async {
                 self.stepButtonArray[track][currentStep].layer.borderColor = self.stepSequencePositionColour.cgColor
                 self.stepButtonArray[track][currentStep].layer.borderWidth = 2
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.stepButtonArray[track][currentStep].layer.borderColor = self.buttonBoarderColour.cgColor
-            self.stepButtonArray[track][currentStep].layer.borderWidth = 0.5
-        }
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.stepButtonArray[track][currentStep].layer.borderColor = self.buttonBoarderColour.cgColor
+                self.stepButtonArray[track][currentStep].layer.borderWidth = 0.5
+            }
             
         }
         
@@ -282,11 +288,11 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
     
     
     
-
     
     
     
-
+    
+    
     
     
     func enterRandomOnOffValues(track: Int) {
@@ -314,7 +320,7 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
             let randomValue = Int(arc4random_uniform(UInt32(11))) + 1
             
             if stepButtonArray[currentTrack][step].stepDetails.isActive {
-        
+                
                 switch details {
                 case .velocity : stepButtonArray[currentTrack][step].stepDetails.velocity = randomValue
                 case .pitch : stepButtonArray[currentTrack][step].stepDetails.pitch = randomValue
@@ -329,7 +335,7 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
         }
         
         updateGridWithButtonStatusForSequencerMode()
-
+        
     }
     
     
@@ -339,23 +345,23 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
         var randomArray : [Int] = []
         
         switch presetNumber {
-            case 0 : randomArray = [0, 8]
-            case 1 : randomArray = [4, 12]
-            case 2 : randomArray = [0, 4, 8, 12]
-            case 3 : randomArray = [3, 7, 11, 15]
-            case 4 : randomArray = [2, 6, 10, 14]
-            case 5 : randomArray = [3, 6, 9, 12, 14]
-            case 6 : randomArray = [0, 2, 4, 6, 8, 10, 12, 14]
-            case 7 : randomArray = [0, 1, 3, 4, 5, 7, 8, 9, 11, 12, 13, 15]
-            case 8 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-            case 9 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-            case 10 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-            case 11 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-            case 12 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-            case 13 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-            case 14 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-            case 15 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-            default : print("Unrecognised value. Unable to autofill track")
+        case 0 : randomArray = [0, 8]
+        case 1 : randomArray = [4, 12]
+        case 2 : randomArray = [0, 4, 8, 12]
+        case 3 : randomArray = [3, 7, 11, 15]
+        case 4 : randomArray = [2, 6, 10, 14]
+        case 5 : randomArray = [3, 6, 9, 12, 14]
+        case 6 : randomArray = [0, 2, 4, 6, 8, 10, 12, 14]
+        case 7 : randomArray = [0, 1, 3, 4, 5, 7, 8, 9, 11, 12, 13, 15]
+        case 8 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        case 9 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        case 10 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        case 11 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        case 12 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        case 13 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        case 14 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        case 15 : randomArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        default : print("Unrecognised value. Unable to autofill track")
         }
         
         let randomArrayCount = randomArray.count
@@ -374,18 +380,6 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
         sequencerDetails.sequencerMode = .home
         
     }
-    
-    
-    
-    func setTrackLength(track: Int, length: Int) {
-        
-    }
-    
-    func setTrackSpeed(track: Int, speed: Int) {
-        
-    }
-    
-    
     
     func soloTrack(track: Int){
         trackDetailsArray[track].solo = !trackDetailsArray[track].solo
@@ -412,9 +406,9 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
         }
         
         checkTrackDirection()
-
+        
     }
-
+    
     
     
     func turnStepOnOff(track: Int, step: Int) {
@@ -430,14 +424,14 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
     
     
     
-
     
-
+    
+    
     
     
     
     func updateGridWithButtonStatusForSequencerMode() {
- 
+        
         clearAllButtonColoursAndTitles()
         
         var conditionValue = 0
@@ -463,7 +457,7 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
             }
         }
     }
-
+    
     
     
     func updateGridWithButtonStatusForHome() {
@@ -478,7 +472,7 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
             }
         }
     }
-
+    
     
     func clearAllButtonColoursAndTitles() {
         for row in 0 ... 11 {
@@ -522,6 +516,25 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
         }
     }
     
+    func updateViewForTrackLengthSpeedScreen() {
+        for row in 0...11 {
+            for column in 0...15 {
+                
+                stepButtonArray[row][column].setTitle("\(column + 1)", for: .normal)
+                stepButtonArray[row][column].backgroundColor = .clear
+                
+                let loopLength = trackDetailsArray[row].loopLength
+                let trackSpeed = trackDetailsArray[row].speed
+                
+                if sequencerDetails.sequencerMode == .awaitingTrackLengthSelection {
+                    stepButtonArray[row][loopLength].backgroundColor = buttonActiveColour
+                } else if sequencerDetails.sequencerMode == .awaitingTrackSpeedDirection {
+                    stepButtonArray[row][trackSpeed].backgroundColor = buttonActiveColour
+                }
+            }
+        }
+    }
+    
     
     func checkTrackDirection() {
         for track in 0 ... 11 {
@@ -542,7 +555,7 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
             }
         }
     }
-        
+    
     func checkTrackSolos() {
         for track in 0 ... 11 {
             if trackDetailsArray[track].solo && trackDetailsArray[track].mute {
@@ -554,7 +567,7 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
     }
     
     
-
+    
     func updateCurrentTrackIndicators() {
         for index in 0 ... 11 {
             if sequencerDetails.sequencerMode == .home {
@@ -565,7 +578,7 @@ class MainViewController: UIViewController, SequencerPositionDelegate {
         }
         trackSelectionLabelArray[currentTrack].backgroundColor = trackInidicatorColour
     }
-
+    
     
     
 }
@@ -650,16 +663,27 @@ extension MainViewController {
         shiftButton.setTitle("SHIFT", for: .normal)
         shiftButton.addTarget(self, action: #selector(shiftButtonPressed), for: .touchUpInside)
         
+        trackSpeedButton = UIButton()
+        trackSpeedButton.setTitle("TRCK SPD", for: .normal)
+        trackSpeedButton.addTarget(self, action: #selector(trackSpeedButtonPressed), for: .touchUpInside)
+        
+        trackLengthButton = UIButton()
+        trackLengthButton.setTitle("TRCK LNGTH", for: .normal)
+        trackLengthButton.addTarget(self, action: #selector(trackLengthButtonPressed), for: .touchUpInside)
+        
         controllerStack.translatesAutoresizingMaskIntoConstraints = false
         controllerStack.axis = .vertical
         controllerStack.distribution = .fillEqually
         
-        controllerStack.addArrangedSubview(stopButton)
-        controllerStack.addArrangedSubview(playButton)
         controllerStack.addArrangedSubview(homeButton)
+        controllerStack.addArrangedSubview(trackSpeedButton)
+        controllerStack.addArrangedSubview(trackLengthButton)
         controllerStack.addArrangedSubview(presetButton)
         controllerStack.addArrangedSubview(randomButton)
+        controllerStack.addArrangedSubview(stopButton)
+        controllerStack.addArrangedSubview(playButton)
         controllerStack.addArrangedSubview(shiftButton)
+        
         
     }
     
@@ -682,7 +706,7 @@ extension MainViewController {
             trackButtonArray = [StepButton]()
             stepButtonArray.append(trackButtonArray)
             
-            let trackDetails = TrackDetails(playDirection: .forward, mute: false, solo: false, speed: .normal, loopLength: 15)
+            let trackDetails = TrackDetails(playDirection: .forward, mute: false, solo: false, speed: 0, loopLength: 15)
             trackDetailsArray.append(trackDetails)
             
             for column in 0 ... 15 {
@@ -710,7 +734,22 @@ extension MainViewController {
             
         }
     }
-
+    
+    @objc func trackSpeedButtonPressed() {
+        sequencerDetails.sequencerMode = .awaitingTrackSpeedDirection
+        sequencerDetails.selectedParameter = .none
+        sequencerDetails.selectedTrack = .noTrackSelected
+        updateViewForTrackLengthSpeedScreen()
+    }
+    
+    
+    @objc func trackLengthButtonPressed() {
+        sequencerDetails.sequencerMode = .awaitingTrackLengthSelection
+        sequencerDetails.selectedParameter = .none
+        sequencerDetails.selectedTrack = .noTrackSelected
+        updateViewForTrackLengthSpeedScreen()
+    }
+    
     @objc func homeButtonPressed() {
         sequencerDetails.sequencerMode = .home
         sequencerDetails.selectedTrack = .noTrackSelected
@@ -750,9 +789,9 @@ extension MainViewController {
             playButton.setTitle("PAUSE", for: .normal)
         } else {
             playButton.setTitle("PLAY", for: .normal)
-                for track in 0 ... 11 {
-                    self.stepButtonArray[track][self.currentStep[track]].layer.borderColor = self.stepSequencePositionColour.cgColor
-                    self.stepButtonArray[track][self.currentStep[track]].layer.borderWidth = 2
+            for track in 0 ... 11 {
+                self.stepButtonArray[track][self.currentStep[track]].layer.borderColor = self.stepSequencePositionColour.cgColor
+                self.stepButtonArray[track][self.currentStep[track]].layer.borderWidth = 2
             }
         }
     }
@@ -784,11 +823,22 @@ extension MainViewController {
             let row = sender.stepDetails.row
             
             switch sequencerDetails.sequencerMode {
-            case .home : turnStepOnOff(track: row, step: column)
-            case .awaitingPresetSelection : enterPresetArrayValues(track: row, presetNumber: column)
-            case .awaitingRandomSelection : enterRandomOnOffValues(track: row)
-            case .updatingStepDetails : updateStepDetails(column: column, row: row)
-            case .shiftButtonEnabled : enterStepParameterValues(track: row, condition: column)
+            case .home :
+                turnStepOnOff(track: row, step: column)
+            case .awaitingPresetSelection :
+                enterPresetArrayValues(track: row, presetNumber: column)
+            case .awaitingRandomSelection :
+                enterRandomOnOffValues(track: row)
+            case .updatingStepDetails :
+                updateStepDetails(column: column, row: row)
+            case .shiftButtonEnabled :
+                enterStepParameterValues(track: row, condition: column)
+            case .awaitingTrackLengthSelection :
+                trackDetailsArray[row].loopLength = column
+                updateViewForTrackLengthSpeedScreen()
+            case .awaitingTrackSpeedDirection :
+                trackDetailsArray[row].speed = column
+                updateViewForTrackLengthSpeedScreen()
             }
         }
     }

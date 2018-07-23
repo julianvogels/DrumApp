@@ -15,12 +15,12 @@ protocol SequencerPositionDelegate : class {
 class Conductor {
     
     weak var sequencerPositionDelegate : SequencerPositionDelegate?
-
+    
     var mixer: AKMixer!
-
+    
     var tracks : [AKMusicTrack]!
     var callbackInsts :  [AKCallbackInstrument]!
-
+    
     var sequencer = AKSequencer()
     var stepPosition = 0
     var currentTempo = 120.0 {
@@ -41,7 +41,7 @@ class Conductor {
             }
         }
     }
-
+    
     
     init() {
         
@@ -59,7 +59,7 @@ class Conductor {
             print("Couldn't start Audiokit")
         }
     }
-
+    
     
     func setupTracks() {
         
@@ -67,7 +67,7 @@ class Conductor {
         
         tracks = [AKMusicTrack]()
         callbackInsts = [AKCallbackInstrument]()
-    
+        
         for _ in 0 ... 2 {
             tracks.append(sequencer.newTrack()!)
         }
@@ -78,25 +78,25 @@ class Conductor {
             tracks[i].setMIDIOutput(callbackInsts[i].midiIn)
         }
     }
-
+    
     func setupMetronomeAndSequencerPosition() {
         
         // ADD INCREMENTING NOTE NUMBERS AT INCREMENTING POSITIONS FOR SEQUENCER POSITION TRACKS (SEQUENCER POSITION TRACKS EQUAL TRACKS 13 TO 25)
         
-            for i in 0 ... 15 {
-                let noteNumber = MIDINoteNumber(i)
-                let position = AKDuration(beats: Double(i))
-                let duration = AKDuration(beats: 0.5)
-                
-                sequencer.tracks[0].add(noteNumber: noteNumber, velocity: 100, position: position, duration: duration)
-            }
+        for i in 0 ... 15 {
+            let noteNumber = MIDINoteNumber(i)
+            let position = AKDuration(beats: Double(i))
+            let duration = AKDuration(beats: 0.5)
             
+            sequencer.tracks[0].add(noteNumber: noteNumber, velocity: 100, position: position, duration: duration)
         }
+        
+    }
     
     func stop() {
         stepPosition = 0
     }
-
+    
     // MARK: - Handling NoteOn Msgs
     fileprivate func setUpCallBackFunctions(channel: Int) -> AKCallbackInstrument{
         
@@ -109,16 +109,10 @@ class Conductor {
                 self?.stepPosition += 1
                 
             default : "Unknown midi message sent"
-                }
             }
         }
-
- 
-    
-    
-    
-    
-  
+    }  
 }
+
 
 

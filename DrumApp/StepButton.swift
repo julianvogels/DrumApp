@@ -27,5 +27,5 @@ class StepButton: UIButton {
         stepDetails = StepDetails(row: row, column: column, velocity: velocity, pitch: pitch, octave: octave, offset: offset, retrigger: retrigger, probability: probability, roll: roll)
         
     }
- 
+    
 }

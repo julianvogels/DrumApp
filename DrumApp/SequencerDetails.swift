@@ -7,7 +7,7 @@
 //
 
 enum SequencerMode {
-    case home, shiftButtonEnabled, awaitingRandomSelection, awaitingPresetSelection, updatingStepDetails
+    case home, shiftButtonEnabled, awaitingRandomSelection, awaitingPresetSelection, updatingStepDetails, awaitingTrackSpeedDirection, awaitingTrackLengthSelection
 }
 
 enum SelectedParameter {
