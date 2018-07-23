@@ -18,9 +18,12 @@
 		9071D9E320E4F2D100586F4A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9071D9E120E4F2D100586F4A /* LaunchScreen.storyboard */; };
 		9071D9EB20E4F31300586F4A /* StepButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9071D9EA20E4F31300586F4A /* StepButton.swift */; };
 		9071D9ED20E4F34500586F4A /* StepDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9071D9EC20E4F34500586F4A /* StepDetails.swift */; };
+		E998E96BBF49D526BAD64327 /* Pods_DrumApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5622E7964FDD29E05D5EFAF8 /* Pods_DrumApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5622E7964FDD29E05D5EFAF8 /* Pods_DrumApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DrumApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8219EFCF110BDC0FFB174BB8 /* Pods-DrumApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DrumApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DrumApp/Pods-DrumApp.debug.xcconfig"; sourceTree = "<group>"; };
 		905FB27920EFB44200BC5F6D /* Conductor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conductor.swift; sourceTree = "<group>"; };
 		905FB27B20FE3F7700BC5F6D /* TrackDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackDetails.swift; sourceTree = "<group>"; };
 		905FB27D20FE47C700BC5F6D /* SequencerDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequencerDetails.swift; sourceTree = "<group>"; };
@@ -34,6 +37,7 @@
 		9071D9E420E4F2D100586F4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9071D9EA20E4F31300586F4A /* StepButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepButton.swift; sourceTree = "<group>"; };
 		9071D9EC20E4F34500586F4A /* StepDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepDetails.swift; sourceTree = "<group>"; };
+		F84B17AA78E5534C54013FD6 /* Pods-DrumApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DrumApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-DrumApp/Pods-DrumApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,17 +45,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E998E96BBF49D526BAD64327 /* Pods_DrumApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04E187C63A5EEE94DC3C6E23 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8219EFCF110BDC0FFB174BB8 /* Pods-DrumApp.debug.xcconfig */,
+				F84B17AA78E5534C54013FD6 /* Pods-DrumApp.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		9071D9C920E4F2CB00586F4A = {
 			isa = PBXGroup;
 			children = (
 				9071D9D420E4F2CB00586F4A /* DrumApp */,
 				9071D9D320E4F2CB00586F4A /* Products */,
+				04E187C63A5EEE94DC3C6E23 /* Pods */,
+				F2DD20E4A2707360CB066C50 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -82,6 +98,14 @@
 			path = DrumApp;
 			sourceTree = "<group>";
 		};
+		F2DD20E4A2707360CB066C50 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5622E7964FDD29E05D5EFAF8 /* Pods_DrumApp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -89,9 +113,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9071D9E720E4F2D100586F4A /* Build configuration list for PBXNativeTarget "DrumApp" */;
 			buildPhases = (
+				0101DF7AA1BAF27A8F5C4A8C /* [CP] Check Pods Manifest.lock */,
 				9071D9CE20E4F2CB00586F4A /* Sources */,
 				9071D9CF20E4F2CB00586F4A /* Frameworks */,
 				9071D9D020E4F2CB00586F4A /* Resources */,
+				6774DCEF73D2C7A9D5270A64 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -147,6 +173,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0101DF7AA1BAF27A8F5C4A8C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DrumApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6774DCEF73D2C7A9D5270A64 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-DrumApp/Pods-DrumApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DrumApp/Pods-DrumApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9071D9CE20E4F2CB00586F4A /* Sources */ = {
@@ -302,6 +367,7 @@
 		};
 		9071D9E820E4F2D100586F4A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8219EFCF110BDC0FFB174BB8 /* Pods-DrumApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -319,6 +385,7 @@
 		};
 		9071D9E920E4F2D100586F4A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F84B17AA78E5534C54013FD6 /* Pods-DrumApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
