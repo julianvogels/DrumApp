@@ -4,7 +4,7 @@ DrumApp is an iPad app for programming patterns inside a step sequencer.
 
 DrumApp will feature a 12 x 16 grid on the right of the screen for note on/off features as well as track/step parameter changes. The controls will be on the left side of the screen. 
 
-The DrumApp is a way to quickly creatre interesting loops. The flexibility of the DrumApp will not only allow users to program drum loops but also bass and melodic lines with individual track speeds, track play direction and various parameters per track and per step.
+The DrumApp is a way to quickly creatre interesting loops. The flexibility of the DrumApp will not only allow users to program drum loops but also bass and melodic lines with individual track speeds, track play direction, track length and various parameters per track/step.
 
 The DrumApp will be a great tool for producers to take with them while travelling and then return home to their studio and replace samples used in the app with sounds from hardware in the studio. 
 
@@ -71,7 +71,7 @@ It must firstly be said that the sampler feature of the app are not yet implemen
 
 My focus so far has been on the sequencer play modes. I want DrumApp to be a very flexible tool and so the currect stage of the project is still determining a proof of concept. The current progress is promising although there are several issues, the main one being latency and poor accurancy of the sequencer.
 
-Currently DrumApp will highlight the current sequencer step being played and users can change the play direction from forwards , reverse, random and ping pong and enter in step retrigger values from within the app.
+Currently DrumApp will highlight the current sequencer step being played and users can change the play direction from forwards , reverse, random and ping pong and enter in step retrigger values from within the app. Users can also configure track length and track speed. At the moment track speed will simply play 1/1 BPM, 1/2 BPM, 1/3 BPM etc but this will later be configured to play more interesting time signatures.
 
 It is also possible to code in the individual track lengths. The default setting is 16 beats but they can be any value between 1 and 16. I have not yet determined how users should change track length in the final product and therefore it is not implemented in the user interface.
 
